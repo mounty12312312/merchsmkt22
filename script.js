@@ -1,5 +1,5 @@
 // Замените 'https://your-domain.com' на реальный URL вашего сервера
-const API_URL = 'symphonious-druid-f45018.netlify.app';
+const API_URL = 'https://symphonious-druid-f45018.netlify.app';
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Скрипт загружен!');
