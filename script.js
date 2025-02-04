@@ -1,5 +1,5 @@
 // Замените 'https://your-domain.com' на реальный URL вашего сервера
-const API_URL = 'http://localhost:3000';
+const API_URL = 'localhost:3000';
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Скрипт загружен!');
