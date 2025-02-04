@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Инициализация Telegram Web App
     const tg = window.Telegram.WebApp;
     tg.ready();
 
@@ -13,16 +12,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Отображаем баланс пользователя
     const balanceElement = document.getElementById('balance');
-    const userBalance = await fetchUserBalance(telegramId);
-    balanceElement.textContent = `Баланс: ${userBalance}`;
+    try {
+        console.log('Запрос баланса для пользователя:', telegramId);
+        const userBalance = await fetchUserBalance(telegramId);
+        console.log('Баланс получен:', userBalance);
+        balanceElement.textContent = `Баланс: ${userBalance}`;
+    } catch (error) {
+        console.error('Ошибка при получении баланса:', error.message);
+        balanceElement.textContent = 'Ошибка загрузки баланса';
+    }
 
     // Загружаем список товаров
-    const products = await fetchProducts();
-    displayProducts(products);
+    try {
+        console.log('Запрос списка товаров...');
+        const products = await fetchProducts();
+        console.log('Товары получены:', products);
+        displayProducts(products);
+    } catch (error) {
+        console.error('Ошибка при загрузке товаров:', error.message);
+        document.getElementById('product-list').innerHTML = '<li>Ошибка загрузки товаров</li>';
+    }
 
     // Функция для получения баланса пользователя
     async function fetchUserBalance(telegramId) {
         const response = await fetch(`/api/user/${telegramId}`);
+        if (!response.ok) {
+            throw new Error('Ошибка при получении баланса');
+        }
         const data = await response.json();
         return data.balance || 0;
     }
@@ -30,6 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Функция для загрузки товаров
     async function fetchProducts() {
         const response = await fetch('/api/products');
+        if (!response.ok) {
+            throw new Error('Ошибка при загрузке товаров');
+        }
         const data = await response.json();
         return data;
     }
@@ -37,6 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Функция для отображения товаров
     function displayProducts(products) {
         const productList = document.getElementById('product-list');
+        productList.innerHTML = ''; // Очищаем список
         products.forEach(product => {
             const li = document.createElement('li');
             li.className = 'product-item';
@@ -55,18 +75,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Глобальная функция для покупки товара
     window.buyProduct = async (productId, telegramId) => {
-        const response = await fetch('/api/buy', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ telegramId, productId })
-        });
+        try {
+            const response = await fetch('/api/buy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ telegramId, productId })
+            });
 
-        const result = await response.json();
-        if (result.success) {
-            alert('Покупка успешна!');
-            location.reload(); // Обновляем страницу
-        } else {
-            alert('Недостаточно средств!');
+            const result = await response.json();
+            if (result.success) {
+                alert('Покупка успешна!');
+                location.reload(); // Обновляем страницу
+            } else {
+                alert('Недостаточно средств!');
+            }
+        } catch (error) {
+            console.error('Ошибка при покупке:', error.message);
+            alert('Ошибка при покупке');
         }
     };
 });
