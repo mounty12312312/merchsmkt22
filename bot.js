@@ -13,7 +13,7 @@ bot.onText(/\/start/, (msg) => {
                 [
                     {
                         text: 'Открыть магазин',
-                        web_app: { url: 'https://mounty12312312.github.io/merchsmkt22/' }
+                        web_app: { url: 'symphonious-druid-f45018.netlify.app' }
                     }
                 ]
             ]
