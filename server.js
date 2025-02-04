@@ -1,8 +1,8 @@
-const cors = require('cors');
-app.use(cors());
 const express = require('express');
 const app = express();
 app.use(express.json());
+const cors = require('cors');
+app.use(cors());
 
 // Замените на ваш API-ключ Google Sheets
 const GOOGLE_SHEETS_API_KEY = 'AIzaSyD3VdbFCIoTegcom2ZFdvpNTm5HzzouOd8';
