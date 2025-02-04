@@ -1,3 +1,7 @@
+console.log('Скрипт загружен!');
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM полностью загружен');
+});
 document.addEventListener('DOMContentLoaded', async () => {
     const tg = window.Telegram.WebApp;
     tg.ready();
